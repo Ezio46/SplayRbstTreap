@@ -33,7 +33,6 @@ private:
         return y;
     }
 
-    // Перемещение узла с ключом k в корень
     Node* splay(Node* root, int k) {
         if (!root)
             return nullptr;
@@ -83,7 +82,6 @@ private:
 public:
     SplayTree() : root(nullptr) {}
 
-    // Поиск и перемещение найденного узла в корень
     Node* search(int key) {
         root = splay(root, key);
         return root->key == key ? root : nullptr;

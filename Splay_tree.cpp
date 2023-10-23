@@ -33,6 +33,7 @@ private:
         return y;
     }
 
+    // Перемещение узла с ключом k в корень
     Node* splay(Node* root, int k) {
         if (!root)
             return nullptr;
@@ -82,6 +83,7 @@ private:
 public:
     SplayTree() : root(nullptr) {}
 
+    // Поиск и перемещение найденного узла в корень
     Node* search(int key) {
         root = splay(root, key);
         return root->key == key ? root : nullptr;
@@ -376,6 +378,28 @@ int main() {
         cout << "Treap " + taskName + ": " << duration.count() << " микросекунд" << endl;
     };
 
+    // Функция для тестирования поиска чисел от 1 до 10
+    auto Test1 = [](SplayTree& splay, const vector<int>& numbers) {
+
+        for (int num : numbers) {
+            splay.search(num);
+        }
+    };
+
+    auto Test2 = [](RBST& rbst, const vector<int>& numbers) {
+
+        for (int num : numbers) {
+            rbst.search(num);
+        }
+    };   
+
+    auto Test3 = [](Treap& treap, const vector<int>& numbers) {
+
+        for (int num : numbers) {
+            treap.search(num);
+        }
+    };
+
     // Поиск 100 случайных чисел
     vector<int> searchNumbers;
     for (int i = 0; i < 100; ++i) {
@@ -383,7 +407,8 @@ int main() {
         searchNumbers.push_back(randomElements[randomIndex]);
     }
 
-    Test(splayRandom, rbstRandom, treapRandom, searchNumbers, "поиск 100 случайных чисел");
+    Test(splayRandom, rbstRandom, treapRandom, searchNumbers, "поиск 100 случайных чисел (random)");
+    Test(splayOrdered, rbstOrdered, treapOrdered, searchNumbers, "поиск 100 случайных чисел (ordered)");
 
     // Поиск чисел от 1 до 10
     vector<int> sequentialNumbers;
@@ -391,7 +416,59 @@ int main() {
         sequentialNumbers.push_back(i);
     }
 
-    Test(splayOrdered, rbstOrdered, treapOrdered, sequentialNumbers, "поиск чисел от 1 до 10");
+    auto start = chrono::high_resolution_clock::now();
+    for (int i = 1; i <= 1000; ++i)
+    {
+        Test1(splayRandom, sequentialNumbers);
+    }
+    auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "splayRandom (поиск чисел от 1 до 10): " << duration.count() << " микросекунд" << endl; 
+
+    start = chrono::high_resolution_clock::now();
+    for (int i = 1; i <= 1000; ++i)
+    {
+        Test1(splayOrdered, sequentialNumbers);
+    }
+    end = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "splayOrdered (поиск чисел от 1 до 10): " << duration.count() << " микросекунд" << endl; 
+
+    start = chrono::high_resolution_clock::now();
+    for (int i = 1; i <= 1000; ++i)
+    {
+        Test2(rbstRandom, sequentialNumbers);
+    }
+    end = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "rbstRandom (поиск чисел от 1 до 10): " << duration.count() << " микросекунд" << endl; 
+
+    start = chrono::high_resolution_clock::now();
+    for (int i = 1; i <= 1000; ++i)
+    {
+        Test2(rbstOrdered, sequentialNumbers);
+    }
+    end = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "rbstOrdered (поиск чисел от 1 до 10): " << duration.count() << " микросекунд" << endl; 
+
+    start = chrono::high_resolution_clock::now();
+    for (int i = 1; i <= 1000; ++i)
+    {
+        Test3(treapRandom, sequentialNumbers);
+    }
+    end = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "treapRandom (поиск чисел от 1 до 10): " << duration.count() << " микросекунд" << endl; 
+
+    start = chrono::high_resolution_clock::now();
+    for (int i = 1; i <= 1000; ++i)
+    {
+        Test3(treapOrdered, sequentialNumbers);
+    }
+    end = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "treapOrdered (поиск чисел от 1 до 10): " << duration.count() << " микросекунд" << endl; 
 
     // Удаление 100 случайных чисел
     vector<int> deleteNumbers;
@@ -400,7 +477,8 @@ int main() {
         deleteNumbers.push_back(randomElements[randomIndex]);
     }
 
-    Test(splayRandom, rbstRandom, treapRandom, deleteNumbers, "удаление 100 случайных чисел");
+    Test(splayRandom, rbstRandom, treapRandom, deleteNumbers, "удаление 100 случайных чисел (random)");
+    Test(splayOrdered, rbstOrdered, treapOrdered, deleteNumbers, "удаление 100 случайных чисел (ordered)");
 
     return 0;
 }
